@@ -1,0 +1,382 @@
+#include <stdio.h>
+
+void Print_Dungeon(char A[5][5]){
+    for(int i=0; i<5; i++){
+        for(int j=0; j<5; j++){
+            printf("%c ",A[i][j]);
+        }
+        printf("\n");
+    }
+    printf("Where would you like to move?\n");
+}
+
+void Player_Moves_Choices(int* PV, int* PH){
+    if((*PV==0)&&(*PH==0)){
+        printf(">R\n>D\n\n");
+        return;
+    }
+    else if((*PV==0)&&(*PH==4)){
+        printf(">L\n>D\n\n");
+        return;
+    }
+    else if((*PV==4)&&(*PH==0)){
+        printf(">R\n>U\n\n");
+        return;
+    }
+    else if((*PV==4)&&(*PH==4)){
+        printf(">L\n>U\n\n");
+        return;
+    }
+    else if(((*PV==0)&&(*PH==1))||((*PV==0)&&(*PH==2))||((*PV==0)&&(*PH==3))){
+        printf(">L\n>R\n>D\n\n");
+        return;
+    }
+    else if(((*PV==4)&&(*PH==1))||((*PV==4)&&(*PH==2))||((*PV==4)&&(*PH==3))){
+        printf(">L\n>R\n>U\n\n");
+        return;
+    }
+    else if(((*PV==1)&&(*PH==0))||((*PV==2)&&(*PH==0))||((*PV==3)&&(*PH==0))){
+        printf(">R\n>U\n>D\n\n");
+        return;
+    }
+    else if(((*PV==1)&&(*PH==4))||((*PV==2)&&(*PH==4))||((*PV==3)&&(*PH==4))){
+        printf(">L\n>U\n>D\n\n");
+        return;
+    }
+    else{printf(">L\n>R\n>U\n>D\n\n");
+        return;}
+}
+
+void Player_Moves_Input(char A[5][5], int* PV, int* PH){
+    char input;
+    scanf(" %c",&input);
+    if(input=='L') (*PH)--;
+    else if(input=='R') (*PH)++;
+    else if(input=='U') (*PV)--;
+    else if(input=='D') (*PV)++;
+    A[*PV][*PH]='O';
+    return;
+}
+
+int Basic_Attack_Sequence(char Possessions[5], int* Player_Health, int* Enemy_Health, int* Enemy_Attack){
+    char inputc;
+    int inputi;
+    while(((*Enemy_Health)>0)&&((*Player_Health)>0)){
+        printf("Player Health - %d, Enemy Health - %d \nWhat do you do?\n>Attack - A\n>Open Inventory - I\n\n",(*Player_Health),(*Enemy_Health));
+        scanf(" %c",&inputc);
+        if(inputc=='A'){
+            printf("\nNarrator: You slash swiftly at the enemy with your sword\n");
+            (*Enemy_Health)-=25;
+            if((*Enemy_Health<=0)) {
+                printf("\nNarrator: you emerge out of that battle victorious. But there is no time to rejoice as time is ticking for the young boy and you must hurry\n");
+                return 0;
+                }
+        }
+        else if(inputc=='I'){
+            printf("contents of your inventory are - %c %c %c %c %c\nP-Health Potion, M-Dried Meat, X-Nothing\n",Possessions[0],Possessions[1],Possessions[2],Possessions[3],Possessions[4]);
+            printf("select a number from 0 to 4 to interact with that slot\n\n");
+            scanf("%d",&inputi);
+            if(Possessions[inputi]=='P'){
+                printf("\nNarrator: You quickly gulp down a health potion\n");
+                if((*Player_Health)>=50){
+                    (*Player_Health)=100;
+                }
+                else{(*Player_Health)+=50;}
+                Possessions[inputi]='X';
+            }
+            else if(Possessions[inputi]=='M'){
+                printf("\nNarrator: You quickly tear through the Dried Meat and swallow it\n");
+                if((*Player_Health)>=70){
+                    (*Player_Health)=100;
+                }
+                else{(*Player_Health)+=30;}
+                Possessions[inputi]='X';
+            }
+            else if(Possessions[inputi]=='X'){
+                printf("\nNarrator: You do nothing\n");
+            }
+        }
+        printf("\nNarrator: The enemy attacks and you try your best to block but fail and get injured\n");
+        (*Player_Health)-=(*Enemy_Attack); 
+    
+    if((*Player_Health)<=0){
+        printf("\nNarrator: You tried your best but soon succumbed to your injuries and lost. You can see the enemy approaching you with a malicious glint in its gleaming red eyes before your vision blurs and you faint\n");
+        return 1;
+    }
+}
+printf("\nNarrator: you emerge out of that battle victorious. But there is no time to rejoice as time is ticking for the young boy and you must hurry\n");
+    return 0;
+}
+
+int Normal_Section(){
+    printf("Narrator: This Section of the Dungeon is empty. The eeriness of the place gets to you. It is best to not stay too long and search for the boy\n");
+    return 0;
+}
+
+int Rat1(char Possessions[5], int* Player_Health, int Event_Checkers[13]){
+    if(Event_Checkers[0]==0){
+        int Rat_Health = 20; int Rat_Attack = 5;
+    printf("Narrator: just as you step inside this section of the Dungeon, you encounter a feral rat\n\n");
+    Event_Checkers[0]=1;
+    return (Basic_Attack_Sequence(Possessions, Player_Health, &Rat_Health, &Rat_Attack));
+    }
+    return (Normal_Section());
+}
+
+int Rat2(char Possessions[5], int* Player_Health, int Event_Checkers[13]){
+    if(Event_Checkers[1]==0){
+        int Rat_Health = 20; int Rat_Attack = 5;
+    printf("Narrator: just as you step inside this section of the Dungeon, you encounter a feral rat\n\n");
+    Event_Checkers[1]=1;
+    return (Basic_Attack_Sequence(Possessions, Player_Health, &Rat_Health, &Rat_Attack));
+    }
+    return (Normal_Section());
+}
+
+int Rat3(char Possessions[5], int* Player_Health, int Event_Checkers[13]){
+    if(Event_Checkers[2]==0){
+        int Rat_Health = 20; int Rat_Attack = 5;
+    printf("Narrator: just as you step inside this section of the Dungeon, you encounter a feral rat\n\n");
+    Event_Checkers[2]=1;
+    return (Basic_Attack_Sequence(Possessions, Player_Health, &Rat_Health, &Rat_Attack));
+    }
+    return (Normal_Section());
+}
+
+
+int Zombie1(char Possessions[5], int* Player_Health, int Event_Checkers[13]){
+    if(Event_Checkers[6]==0){
+        int Zombie_Health = 70; int Zombie_Attack = 20;
+    printf("Narrator: just as you step inside this section of the Dungeon, you encounter a vicous Zombie\n\n");
+    Event_Checkers[6]=1;
+    return (Basic_Attack_Sequence(Possessions, Player_Health, &Zombie_Health, &Zombie_Attack));
+    }
+    return (Normal_Section());
+}
+
+int Zombie2(char Possessions[5], int* Player_Health, int Event_Checkers[13]){
+    if(Event_Checkers[7]==0){
+        int Zombie_Health = 70; int Zombie_Attack = 20;
+    printf("Narrator: just as you step inside this section of the Dungeon, you encounter a vicous Zombie\n\n");
+    Event_Checkers[7]=1;
+    return (Basic_Attack_Sequence(Possessions, Player_Health, &Zombie_Health, &Zombie_Attack));
+    }
+    return (Normal_Section());
+}
+
+int Zombie3(char Possessions[5], int* Player_Health, int Event_Checkers[13]){
+    if(Event_Checkers[8]==0){
+        int Zombie_Health = 70; int Zombie_Attack = 20;
+    printf("Narrator: just as you step inside this section of the Dungeon, you encounter a vicous Zombie\n\n");
+    Event_Checkers[8]=1;
+    return (Basic_Attack_Sequence(Possessions, Player_Health, &Zombie_Health, &Zombie_Attack));
+    }
+    return (Normal_Section());
+}
+
+int Zombie4(char Possessions[5], int* Player_Health, int Event_Checkers[13]){
+    if(Event_Checkers[9]==0){
+        int Zombie_Health = 70; int Zombie_Attack = 20;
+    printf("Narrator: just as you step inside this section of the Dungeon, you encounter a vicous Zombie\n\n");
+    Event_Checkers[9]=1;
+    return (Basic_Attack_Sequence(Possessions, Player_Health, &Zombie_Health, &Zombie_Attack));
+    }
+    return (Normal_Section());
+}
+
+int Boy(){
+    printf("Narrator: As soon as you step into this section, you see the young boy. He looks not more older than 18, maybe 19. He appears unharmed for the most part other than some scratches and dirt. His parents are must be eager to see him again, so you quickly take him back the route you came. Another good deed, another good day\n\n");
+    return 2;
+}
+
+int Golem(char Possessions[5], int* Player_Health, int Event_Checkers[13]){
+    if(Event_Checkers[4]==0){
+        int Golem_Health = 100; int Golem_Attack = 35;
+    printf("Narrator: just as you step inside this section of the Dungeon, you encounter a towering Golem\n\n");
+    Event_Checkers[4]=1;
+    return (Basic_Attack_Sequence(Possessions, Player_Health, &Golem_Health, &Golem_Attack));
+    }
+    return (Normal_Section());
+}
+
+int Ghost(char Possessions[5], int* Player_Health, int Event_Checkers[13]){
+    if(Event_Checkers[5]==0){
+        char inputc;
+    int Ghost_Health = 60; int Ghost_Attack = 15;
+    printf("Narrator: just as you step inside this section of the Dungeon, you encounter a wailing ghost. It seems to be sobbing and shows no intention to attack. It is possible to approach the Ghost and end this without any violence.\n\n");
+    printf("What do you do?\n>Attack the Ghost - A\n>Approach the Ghost - B\n\n");
+    scanf(" %c",&inputc);
+    if(inputc=='A'){
+        Event_Checkers[5]=1;
+    return (Basic_Attack_Sequence(Possessions, Player_Health, &Ghost_Health, &Ghost_Attack));
+    } 
+    else if(inputc=='B'){
+        printf("Narrator: You slowly walk towards the ghost with empty arms and gently ask why its crying. Seeing your kindness the poor thing starts sobbing and spills out how lonely it feels. After a short while the ghost appears to feel better from the venting, it thanks you for your kindness and dissappears into the air, hopefully into the afterlife\n\n");
+    Event_Checkers[5]=1;
+    return 0;
+    }
+    }
+    return (Normal_Section());
+}
+
+int Wolf(char Possessions[5], int* Player_Health, int Event_Checkers[13]){
+    if(Event_Checkers[3]==0){
+    char inputc;
+    int Wolf_Health = 75; int Wolf_Attack = 25;
+    if(Possessions[2]=='M'){
+        printf("Narrator: just as you step inside this section of the Dungeon, you encounter a lone wolf. you instinctively step and your hand reaches for your sword but upon closer inspection you notice that the wolf is injured. You could offer it your dried rations and avoid conflict with the majestic yet formidable beast\n\n");
+        printf("What do you do?\n>Attack the Wolf - A\n>Offer your rations to the Wolf - B\n\n");
+        scanf(" %c",&inputc);
+        if(inputc=='A'){
+            Event_Checkers[3]=1;
+           return (Basic_Attack_Sequence(Possessions, Player_Health, &Wolf_Health, &Wolf_Attack));
+        }
+        else if(inputc=='B'){
+            printf("Narrator: you slowly and carefully approach the injured wolf with the dried meat in your hands and place it at a safe distance before stepping back. the wolf initially eyes it suspiciously but cannot resist the smell. seeing that you have offered it with good intentions, it slowly walks towards the meat before tearing through it. after eating it gives you an understanding look before leaving the area\n\n");
+        Possessions[2]='X';
+        Event_Checkers[3]=1;
+        return 0;
+        } 
+        }
+        Event_Checkers[3]=1;
+    return (Basic_Attack_Sequence(Possessions, Player_Health, &Wolf_Health, &Wolf_Attack));
+    }
+    return (Normal_Section());
+}
+
+
+int Health_Potion1(char Possessions[5], int Event_Checkers[13]){
+    if(Event_Checkers[10]==0){
+        printf("Narrator: on entering this section of the dungeon, you notice a small cloth sack at the other end. you cautiosly approach it and on opening you find a Health Potion. This is sure to aid you further in your quest\n\n");
+    for(int i=0; i<5; i++){
+        if(Possessions[i]=='X'){
+            Possessions[i]='P';
+            Event_Checkers[10]=1;
+            return 0;
+        }
+    }
+    printf("Narrator: Unfortunately, your inventory is too full and you have to sadly leave the potion behind. You hope at the very least it will be used by someone who needs it more than you\n\n");
+    Event_Checkers[10]=1;
+    return 0;
+    }
+    return (Normal_Section());
+}
+
+int Health_Potion2(char Possessions[5], int Event_Checkers[13]){
+    if(Event_Checkers[11]==0){
+        printf("Narrator: on entering this section of the dungeon, you notice a small cloth sack at the other end. you cautiosly approach it and on opening you find a Health Potion. This is sure to aid you further in your quest\n\n");
+    for(int i=0; i<5; i++){
+        if(Possessions[i]=='X'){
+            Possessions[i]='P';
+            Event_Checkers[11]=1;
+            return 0;
+        }
+    }
+    printf("Narrator: Unfortunately, your inventory is too full and you have to sadly leave the potion behind. You hope at the very least it will be used by someone who needs it more than you\n\n");
+    Event_Checkers[11]=1;
+    return 0;
+    }
+    return (Normal_Section());
+}
+
+int Health_Potion3(char Possessions[5], int Event_Checkers[13]){
+    if(Event_Checkers[12]==0){
+        printf("Narrator: on entering this section of the dungeon, you notice a small cloth sack at the other end. you cautiosly approach it and on opening you find a Health Potion. This is sure to aid you further in your quest\n\n");
+    for(int i=0; i<5; i++){
+        if(Possessions[i]=='X'){
+            Possessions[i]='P';
+            Event_Checkers[12]=1;
+            return 0;
+        }
+    }
+    printf("Narrator: Unfortunately, your inventory is too full and you have to sadly leave the potion behind. You hope at the very least it will be used by someone who needs it more than you\n\n");
+    Event_Checkers[12]=1;
+    return 0;
+    }
+    return (Normal_Section());
+}
+
+
+int Player_Event(int* PV, int* PH, char Possessions[5], int* Player_Health, int Event_Checkers[13]){
+    if((*PV==0)&&(*PH==1)){
+    return (Rat1(Possessions, Player_Health, Event_Checkers));
+    }
+    else if((*PV==1)&&(*PH==0)){
+    return (Rat2(Possessions, Player_Health, Event_Checkers));
+    }
+    else if((*PV==4)&&(*PH==0)){
+    return (Rat3(Possessions, Player_Health, Event_Checkers));
+    }
+    else if((*PV==0)&&(*PH==4)){
+    return (Zombie1(Possessions, Player_Health, Event_Checkers));
+    }
+    else if((*PV==2)&&(*PH==3)){
+    return (Zombie2(Possessions, Player_Health, Event_Checkers));
+    }
+    else if((*PV==3)&&(*PH==4)){
+    return (Zombie3(Possessions, Player_Health, Event_Checkers));
+    }
+    else if((*PV==4)&&(*PH==2)){
+    return (Zombie4(Possessions, Player_Health, Event_Checkers));
+    }
+    else if((*PV==1)&&(*PH==2)){
+    return (Wolf(Possessions, Player_Health, Event_Checkers));
+    }
+    else if((*PV==2)&&(*PH==1)){
+    return (Golem(Possessions, Player_Health, Event_Checkers));
+    }
+    else if((*PV==3)&&(*PH==0)){
+    return (Ghost(Possessions, Player_Health, Event_Checkers));
+    }
+    else if((*PV==1)&&(*PH==3)){
+    return (Health_Potion1(Possessions, Event_Checkers));
+    }
+    else if((*PV==3)&&(*PH==1)){
+    return (Health_Potion1(Possessions, Event_Checkers));
+    }
+    else if((*PV==4)&&(*PH==4)){
+    return (Health_Potion1(Possessions, Event_Checkers));
+    }
+    else if((*PV==3)&&(*PH==3)){
+        return (Boy());
+    }
+    else{ return (Normal_Section()); 
+    }
+}
+
+int main()
+{
+    char temp; int system_check;
+    char Possessions[5]={'P', 'P', 'M', 'X', 'X'};
+    int Player_Health = 100;
+    char Dungeon[5][5] = {{'O','_','_','_','_'},{'_','_','_','_','_'},{'_','_','_','_','_'},{'_','_','_','_','_'},{'_','_','_','_','_'}};
+    int Position_Vertical=0, Position_Horizontal=0;
+    int Event_Checkers[13]={0,0,0,0,0,0,0,0,0,0,0,0,0};
+    // EV_R01=0, EV_R10=0, EV_R40=0, EV_W=0, EV_GO=0, EV_GH=0, EV_Z04=0, EV_Z23=0, EV_Z34=0, EV_Z42=0, EV_HP13=0, EV_HP31=0, EV_HP44=0;
+
+    printf("Narrator: You were surprised to see a job to rescue an over-enthusiastic young boy who had traversed into the Forest behind the village to go Dungeon hunting alone. After some search and following many trails you find the Dungeon the young Adventurer had gotten lost in. You were suprised that he had even made it this far considering how difficult this dungeon seemed to be, even for you, a fairly experienced Paladin at peak health of 100HP.\n");
+    printf("\nPress enter to continue\n");
+    scanf("%c",&temp);
+    printf("Narrator: In your possessions are your trusty sword that does a damage of 25HP, some dried meat that could restore 30HP, and two health potions that restore 50HP each.\nYou hope that the young boy is still alive and step into the dungeon\n");
+    printf("\nPress enter to continue\n");
+    scanf("%c",&temp);
+    
+    while(1){
+        Print_Dungeon(Dungeon);
+        Player_Moves_Choices(&Position_Vertical, &Position_Horizontal);
+        Player_Moves_Input(Dungeon, &Position_Vertical, &Position_Horizontal);
+        system_check = Player_Event(&Position_Vertical, &Position_Horizontal, Possessions, &Player_Health, Event_Checkers);
+        if(system_check == 0) continue;
+        else if(system_check == 1){
+           printf("GAME OVER\n");
+           return 0;
+        }
+        else if(system_check == 2){
+            printf("YOU DID IT!!!\n");
+            return 0;
+        }
+    }   
+   return 0; 
+}
+
+
