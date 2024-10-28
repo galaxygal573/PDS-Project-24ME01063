@@ -11,3 +11,8 @@ meet different enemies and situations throughout the whole area. You can fight s
 in this game if you run out of HP.
 I know there is room for a lot of improvement, but I feel that this project is a great starting place for me as I delve into this more in the future.
 Thank you so much for reading.
+
+28-10-24
+
+I'm adding this side note to further detail about the code and how I've used different functions. The main loop follows the player viewing their map, moving to an adjacent tile, and encountering any event. This loop is to repeat until either the player succeeds in finding the boy or if the player faints from excessive damage. This three step loop was broken down into multiple easily accessible short functions. 
+The first prints the dungeon to the user, the second displays to the user the choices for direction as not all tiles have the option to move in all 4 directions (Up, Down, Left, Right), the third takes the input and changes the Dungeon array to reflect the new position the next time it prints it and the fourth is a simple event checking function. If there is a major encounter in the selected tile then a nested function call is ensued. After the event, the system checks again to see if the player has either finished the game or has met their doom, if neither then the loop continues.
